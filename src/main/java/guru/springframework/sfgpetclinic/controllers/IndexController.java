@@ -8,6 +8,6 @@ public class IndexController {
     }
 
     public String oupsHandler(){
-        return "notimplemented";
+     throw new ValueNotFoundException();
     }
 }
