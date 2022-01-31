@@ -64,11 +64,11 @@ class IndexControllerTest implements ControllerTests {
 
     @Test
     void testAssumptionTrue() {
-        assumeTrue("GURU".equalsIgnoreCase(System.getenv("GURU_RUNTIME")));
+//        assumeTrue("GURU".equalsIgnoreCase(System.getenv("GURU_RUNTIME")));
     }
     @Test
     void testAssumptionTrueAssumptionIsTrue() {
-        assumeTrue("GURU".equalsIgnoreCase("GURU_RUNTIME"));
+//        assumeTrue("GURU".equalsIgnoreCase("GURU_RUNTIME"));
     }
 
     @EnabledOnOs(OS.MAC)

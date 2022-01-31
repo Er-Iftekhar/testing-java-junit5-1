@@ -2,9 +2,7 @@ package guru.springframework.sfgpetclinic.model;
 
 import guru.springframework.sfgpetclinic.ModelTests;
 import org.assertj.core.internal.bytebuddy.matcher.StringMatcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,5 +32,12 @@ class PersonTest implements ModelTests {
                 ()-> assertEquals("Joe", person.getFirstName() , "First name fails"),
                 ()-> assertEquals("Buck", person.getLastName() , "Last name fails")
         );
+    }
+
+    @RepeatedTest(value = 10, name = "{displayName} : {currentRepetition} of {totalRepetitions}" )
+    @DisplayName("My Repeated Test")
+    @Test
+    void myRepeatedTests() {
+        //todo - impl
     }
 }
