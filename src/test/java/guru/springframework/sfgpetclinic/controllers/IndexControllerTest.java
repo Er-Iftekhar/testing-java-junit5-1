@@ -4,9 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.*;
 
+import javax.naming.NameAlreadyBoundException;
+import javax.xml.namespace.QName;
 import java.time.Duration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -26,6 +30,8 @@ class IndexControllerTest {
         assertEquals("index", indexController.index(), "Wrong View Returned");
         assertEquals("index", indexController.index(), ()-> "Another expensive message" +
                 "Make me only if you have to");
+
+        assertThat(indexController.index()).isEqualTo("index");
     }
 
     @DisplayName("Test exception")
@@ -65,5 +71,41 @@ class IndexControllerTest {
     @Test
     void testAssumptionTrueAssumptionIsTrue() {
         assumeTrue("GURU".equalsIgnoreCase("GURU_RUNTIME"));
+    }
+
+    @EnabledOnOs(OS.MAC)
+    @Test
+    void testMeOnMacOS() {
+
+    }
+
+    @EnabledOnOs(OS.WINDOWS)
+    @Test
+    void testMeOnWindows() {
+
+    }
+
+    @EnabledOnJre(JRE.JAVA_8)
+    @Test
+    void testMeOnJava8() {
+
+    }
+
+   @EnabledOnJre(JRE.JAVA_11)
+    @Test
+    void testMeOnJava11() {
+
+    }
+
+    @EnabledIfEnvironmentVariable(named = "USERNAME", matches = "SYSTEM")
+    @Test
+    void testIfUserJT() {
+
+    }
+
+    @EnabledIfEnvironmentVariable(named = "USERNAME", matches = "JT")
+    @Test
+    void testIfUserFred() {
+
     }
 }
