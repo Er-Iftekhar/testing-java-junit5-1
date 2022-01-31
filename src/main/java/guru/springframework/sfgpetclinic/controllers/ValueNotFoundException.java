@@ -1,4 +1,4 @@
 package guru.springframework.sfgpetclinic.controllers;
 
-public class ValueNotFoundException extends Throwable {
+public class ValueNotFoundException extends RuntimeException {
 }
