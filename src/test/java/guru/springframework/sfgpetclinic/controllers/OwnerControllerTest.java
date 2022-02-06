@@ -8,18 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.validateMockitoUsage;
+import static org.mockito.Mockito.inOrder;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +27,8 @@ class OwnerControllerTest {
     OwnerService ownerService;
     @Mock
     BindingResult bindingResult;
+    @Mock
+    Model model;
 
     @InjectMocks
     OwnerController ownerController;
@@ -78,8 +76,7 @@ class OwnerControllerTest {
     void processFindFormWildcardNotFound() {
         //given
         Owner owner = new Owner(5L, "Joe", "DontFindMe");
-//        List<Owner> ownerList = new ArrayList<>();
-//        given(ownerService.findAllByLastNameLike(stringArgumentCaptor.capture())).willReturn(ownerList);
+
 
         //when
         String viewName = ownerController.processFindForm(owner,bindingResult,null);
@@ -87,21 +84,25 @@ class OwnerControllerTest {
         //then
         assertThat("%DontFindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
         assertThat("owners/findOwners").isEqualToIgnoringCase(viewName   );
+
+
     }
 
     @Test
     void processFindFormWildcardListFound() {
         //given
         Owner owner = new Owner(5L, "Joe", "FoundMany");
-//        List<Owner> ownerList = new ArrayList<>();
-//        given(ownerService.findAllByLastNameLike(stringArgumentCaptor.capture())).willReturn(ownerList);
-
+        InOrder inOrder = inOrder(ownerService, model);
         //when
-        String viewName = ownerController.processFindForm(owner,bindingResult, Mockito.mock(Model.class));
+        String viewName = ownerController.processFindForm(owner,bindingResult, model);
 
         //then
         assertThat("%FoundMany%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
         assertThat("owners/ownersList").isEqualToIgnoringCase(viewName   );
+
+        //inOrder asserts
+        inOrder.verify(ownerService).findAllByLastNameLike(anyString());
+        inOrder.verify(model).addAttribute(anyString(), anyList());
     }
 
     @Test
