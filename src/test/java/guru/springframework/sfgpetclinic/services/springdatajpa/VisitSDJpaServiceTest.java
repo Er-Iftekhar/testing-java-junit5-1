@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,49 +31,72 @@ class VisitSDJpaServiceTest {
 
     @BeforeEach
     void setUp() {
-        Visit visit1 = new Visit(1L);
-        Visit visit2 = new Visit(2L);
-         visits = new HashSet<>();
-        visits.add(visit1);
-        visits.add(visit2);
+
     }
 
     @Test
     void findAll() {
-        when(visitRepository.findAll()).thenReturn(visits);
+
+//        given
+        Visit visit1 = new Visit(1L);
+        Visit visit2 = new Visit(2L);
+        visits = new HashSet<>();
+        visits.add(visit1);
+        visits.add(visit2);
+
+//        when
+        given(visitRepository.findAll()).willReturn(visits);
+
+
+//        then
         Set<Visit> visitsFound = visitSDJpaService.findAll();
         assertNotNull(visitsFound);
-        verify(visitRepository).findAll();
+        then(visitRepository).should(times(1)).findAll();
     }
 
     @Test
     void findById() {
-        when(visitRepository.findById(anyLong())).thenReturn(Optional.of(visits.stream().findFirst().get()));
+        //given
+        Visit visit1 = new Visit(1L);
+        given(visitRepository.findById(anyLong())).willReturn(Optional.of(visit1));
+//        when(visitRepository.findById(anyLong())).thenReturn(Optional.of(visits.stream().findFirst().get()));
+
+//        when
         Visit visitFoundById = visitSDJpaService.findById(anyLong());
+//        then
         assertNotNull(visitFoundById);
-        verify(visitRepository).findById(anyLong());
+        then(visitRepository).should(times(1)).findById(anyLong());
     }
 
     @Test
     void save() {
+//        given
         Visit testVisit = new Visit();
-        when(visitRepository.save(any(Visit.class))).thenReturn(testVisit);
+        given(visitRepository.save(testVisit)).willReturn(testVisit);
+//        when
+//        when(visitRepository.save(any(Visit.class))).thenReturn(testVisit);
         Visit savedVisit = visitSDJpaService.save(testVisit);
+//        then
         assertNotNull(savedVisit);
-        verify(visitRepository).save(any(Visit.class));
+        then(visitRepository).should(times(1)).save(testVisit);
     }
 
     @Test
     void delete() {
-//        when(visitRepository.delete(any(Visit.class)).then(visits.remove(visits.stream().findFirst().get()));
+        //given
         Visit testVisit = new Visit(1L);
+        //when
         visitSDJpaService.delete(testVisit);
-        verify(visitRepository, atLeastOnce()).delete(any(Visit.class));
+//        then
+        then(visitRepository).should().delete(any(Visit.class));
+//        verify(visitRepository, atLeastOnce()).delete(any(Visit.class));
     }
 
     @Test
     void deleteById() {
+//        when
         visitSDJpaService.deleteById(1L);
-        verify(visitRepository, atLeastOnce()).deleteById(anyLong());
+//        then
+        then(visitRepository).should(times(1)).deleteById(anyLong());
     }
 }
